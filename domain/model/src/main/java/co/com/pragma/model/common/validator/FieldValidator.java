@@ -1,0 +1,22 @@
+package co.com.pragma.model.common.validator;
+
+import java.util.Map;
+
+public final class FieldValidator {
+
+    private FieldValidator() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static void validateNotBlank(String value, String field, String message,
+            Map<String, String> errors) {
+        if (value == null || value.isBlank())
+            errors.put(field, message);
+    }
+
+    public static void validateNotNull(Object value, String field, String message,
+            Map<String, String> errors) {
+        if (value == null)
+            errors.put(field, message);
+    }
+}
