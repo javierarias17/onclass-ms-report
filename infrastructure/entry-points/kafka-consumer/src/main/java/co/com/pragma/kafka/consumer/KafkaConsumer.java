@@ -1,0 +1,35 @@
+package co.com.pragma.kafka.consumer;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+@Component
+@Log4j2
+@RequiredArgsConstructor
+public class KafkaConsumer {
+    private final ReactiveKafkaConsumerTemplate<String, String> kafkaReceiver;
+    //private final SomeUseCase useCase;
+
+    @EventListener(ApplicationStartedEvent.class)
+    public Flux<Object> listenMessages() {
+        return kafkaReceiver
+                .receiveAutoAck()
+                .publishOn(Schedulers.newBoundedElastic(Schedulers.DEFAULT_BOUNDED_ELASTIC_SIZE, Schedulers.DEFAULT_BOUNDED_ELASTIC_QUEUESIZE, "kafka"))
+                .flatMap(record -> {
+                    // map record and process
+                    // return userCase.something(record.value())
+                    log.info("Record received {}", record.value());
+                    return Mono.empty();
+                })
+                .doOnError(error -> log.error("Error processing kafka record", error))
+                .retry()
+                .repeat();
+    }
+}

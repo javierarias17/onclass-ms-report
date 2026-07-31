@@ -23,3 +23,5 @@ project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':kafka-consumer'
+project(':kafka-consumer').projectDir = file('./infrastructure/entry-points/kafka-consumer')
