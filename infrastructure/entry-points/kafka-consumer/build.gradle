@@ -1,7 +1,12 @@
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
-    implementation 'io.projectreactor.kafka:reactor-kafka:1.3.25' // Deprecated
+    implementation 'io.projectreactor.kafka:reactor-kafka:1.3.25'
     implementation 'org.springframework.boot:spring-boot-starter-kafka'
     implementation 'org.apache.logging.log4j:log4j-api'
+    implementation 'tools.jackson.core:jackson-databind'
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
